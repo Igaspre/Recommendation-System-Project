@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="Regístrate para obtener recomendaciones de destinos turísticos personalizadas.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Registro - Recomendación Turística</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAABILAAASCwAAAAAAAAAAAA==" type="image/x-icon">
+
+        <style>
+        :root {
+            /* Paleta de colores */
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary-color: #f59e0b; /* Usado para borde L2 */
+            --dark-color: #1e293b;
+            --light-color: #ffffff;
+            --overlay-color: rgba(15, 23, 42, 0.6);
+            --transition: all 0.3s ease;
+
+            /* Colores para el rango dinámico */
+            --range-color-0: #dc3545;
+            --range-color-5: #ffc107;
+            --range-color-10: #198754;
+            --range-color-disabled: #adb5bd;
+            --border-color: #e2e8f0;
+        }
+
+        html, body {
+            min-height: 100%; margin: 0; padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-light);
+            color: var(--dark-color);
+            scroll-behavior: smooth;
+        }
+        /* --- Estilos Navbar, Container, Card, Form (sin cambios) --- */
+        .navbar { background-color: var(--primary-dark) !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); z-index: 10; padding: 1rem 0; transition: var(--transition); }
+        .navbar-brand { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.5rem; color: var(--light-color); }
+        .nav-link { font-weight: 500; margin: 0 0.5rem; position: relative; transition: var(--transition); color: rgba(255, 255, 255, 0.8); }
+        .nav-link:hover { color: var(--light-color); }
+        .nav-link:after { content: ''; position: absolute; width: 0; height: 2px; bottom: -3px; left: 50%; transform: translateX(-50%); background-color: var(--secondary-color); transition: var(--transition); }
+        .nav-link:hover:after { width: 80%; }
+        .register-container { min-height: calc(100vh - 76px); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .card { border: none; border-radius: 16px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1); width: 100%; max-width: 900px; overflow: hidden; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.8s ease forwards; }
+        .card-header { background: var(--primary-color); color: var(--light-color); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.5rem; padding: 1.5rem; text-align: center; border: none; border-bottom: 4px solid var(--primary-dark); }
+        .card-body { padding: 2rem; background-color: var(--light-color); }
+        .form-label { font-weight: 500; color: var(--dark-color); margin-bottom: 0.5rem; }
+        .form-control, .form-select { padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: #f8fafc; font-family: 'Poppins', sans-serif; transition: var(--transition); }
+        .form-control:focus, .form-select:focus { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); border-color: var(--primary-color); background-color: var(--light-color); }
+        .form-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 16px 12px; }
+        .btn-custom { background-color: var(--primary-color); border: none; font-size: 1.1rem; padding: 12px 30px; color: var(--light-color); border-radius: 8px; font-weight: 500; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25); transition: var(--transition); width: 100%; margin-top: 1rem; }
+        .btn-custom:hover, .btn-custom:focus { background-color: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3); color: var(--light-color); }
+        .btn-custom:disabled { background-color: #94a3b8; transform: none; box-shadow: none; }
+        .error-message { color: #ef4444; text-align: center; margin-bottom: 1rem; font-size: 0.9rem; background-color: #fee2e2; padding: 0.75rem; border-radius: 8px; border-left: 4px solid #ef4444; }
+        #password-error { color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem; }
+        .input-group { position: relative; }
+        .input-icon { position: absolute; top: 50%; left: 1rem; transform: translateY(-50%); color: #94a3b8; z-index: 3; }
+        .input-with-icon { padding-left: 2.8rem; }
+        .password-toggle { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; z-index: 3; }
+        .card-footer { text-align: center; background-color: #f8fafc; border-top: 1px solid var(--border-color); padding: 1.25rem; }
+        .card-footer a { color: var(--primary-color); text-decoration: none; font-weight: 500; transition: var(--transition); }
+        .card-footer a:hover, .card-footer a:focus { color: var(--primary-dark); text-decoration: underline; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Estilos del Modal --- */
+        .modal-content { border-radius: 12px; }
+        .modal-header { border-bottom: none; padding-bottom: 0.5rem; }
+        .modal-body { background-color: #f8fafc; padding: 1.5rem; }
+        .modal-footer { border-top: 1px solid var(--border-color); background-color: var(--light-color); }
+        .modal-backdrop.show { z-index: 1050 !important; opacity: 0.6; background-color: rgba(15, 23, 42, 0.7); }
+        .modal { z-index: 1055 !important; }
+        .modal-dialog { pointer-events: none; }
+        .modal-content { pointer-events: auto; }
+
+        /* --- Estilos Tarjetas de Preferencia (Base para L1 y L2) --- */
+        .preference-card {
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .preference-card:hover {
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.1);
+            transform: translateY(-3px);
+            border-left: 3px solid var(--primary-color);
+            padding-left: calc(1rem - 2px);
+        }
+        .preference-card .form-check { margin-bottom: 0.75rem; }
+        .preference-card .form-check-label { font-weight: 500; cursor: pointer; }
+
+        /* --- Nivel 1 Preferencias --- */
+        .preference-level-1 {
+            margin-bottom: 0.75rem;
+        }
+        /* .preference-level-1:not(.no-children) .form-check-label::after { */
+        /*     content: '\f078'; /* Font Awesome chevron-down */ */
+        /*     font-family: 'Font Awesome 6 Free'; */
+        /*     font-weight: 900; */
+        /*     font-size: 0.8em; */
+        /*     color: #adb5bd; */
+        /*     margin-left: 0.5rem; */
+        /*     display: inline-block; */
+        /*     transition: transform 0.3s ease; */
+        /*     float: right; */
+        /*     line-height: inherit; */
+        /*     margin-top: 0.15em; */
+        /* } */
+        /* .preference-level-1:not(.no-children) .preference-checkbox:checked ~ .form-check-label::after { */
+        /*     transform: rotate(-180deg); */
+        /*     color: var(--primary-color); */
+        /* } */
+
+
+    .toggle-collapse {
+        border: none;
+        background: none;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+        .preference-level-1.no-children .form-check-label::after {
+            display: none;
+        }
+
+        /* --- Nivel 2: For extra safety, no arrow --- */
+        .preference-level-2 .form-check-label::after {
+            display: none !important;
+        }
+
+        /* --- Nivel 2 Contenedor y Columnas --- */
+        .preference-level-2-container.collapse {
+            padding: 0; margin: 0; border: none; background-color: transparent;
+        }
+        .preference-level-2-container.collapse.show {
+            padding: 1rem;
+            margin-top: 0.75rem;
+            margin-left: 1.5rem;
+            background-color: #f0f3f5;
+            border-radius: 6px;
+            border-left: 3px solid var(--secondary-color);
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+        }
+        .preferences-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* --- Estilos del Input Range y Badge (Sin cambios) --- */
+        .preference-rating-container { display: flex; align-items: center; gap: 0.75rem; width: 100%; }
+        .form-range.preference-rating { flex-grow: 1; cursor: pointer; accent-color: var(--range-color-5); transition: var(--transition); height: 0.5rem; background-color: #e9ecef; border-radius: 0.5rem; appearance: none; -webkit-appearance: none; }
+        .form-range.preference-rating:focus { outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+        .form-range.preference-rating:disabled { cursor: not-allowed; opacity: 0.6; accent-color: var(--range-color-disabled); }
+        .range-value { min-width: 38px; padding: 0.25em 0.5em; font-size: 0.85rem; font-weight: 600; color: var(--light-color); text-align: center; border-radius: 6px; transition: background-color 0.3s ease; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); }
+        .form-range.preference-rating::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 1.25rem; height: 1.25rem; background-color: var(--thumb-color, var(--range-color-5)); border-radius: 50%; cursor: pointer; margin-top: -0.375rem; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: background-color 0.3s ease, transform 0.1s ease; }
+        .form-range.preference-rating::-webkit-slider-thumb:active { transform: scale(1.1); }
+        .form-range.preference-rating::-moz-range-thumb { width: 1.25rem; height: 1.25rem; background-color: var(--thumb-color, var(--range-color-5)); border: none; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.15); transition: background-color 0.3s ease, transform 0.1s ease; }
+        .form-range.preference-rating::-moz-range-thumb:active { transform: scale(1.1); }
+        .form-range.preference-rating:disabled::-webkit-slider-thumb { background-color: var(--range-color-disabled); cursor: not-allowed; transform: scale(0.9); }
+        .form-range.preference-rating:disabled::-moz-range-thumb { background-color: var(--range-color-disabled); cursor: not-allowed; transform: scale(0.9); }
+
+        /* --- Media queries --- */
+        @media (max-width: 768px) {
+            .card-body { padding: 1.5rem; }
+            .modal-dialog { margin: 0.5rem; }
+            .preferences-columns { grid-template-columns: 1fr; }
+            .preference-level-2-container.collapse.show { margin-left: 0.5rem; }
+            .preference-level-1:not(.no-children) .form-check-label::after { float: none; margin-left: 0.5rem; }
+        }
+
+        .input-group-text {
+            display: flex;
+            align-items: center;  /* Centra verticalmente */
+            justify-content: center;  /* Centra horizontalmente */
+            min-width: 45px;  /* Asegura un espacio suficiente */
+            padding: 0.5rem 0.75rem;
+        }
+
+        </style>
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('dashboard') if logged_in_user else url_for('home') }}"><i class="fas fa-compass me-2"></i>Recomendación Turística</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link active" href="/login"><i class="fas fa-sign-in-alt me-1"></i> Iniciar sesión</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/register"><i class="fas fa-user-plus me-1"></i> Registro</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Register Card -->
+        <div class="register-container">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-user-edit me-2"></i>Completa tu Registro</div>
+                <div class="card-body">
+                    {% if error %}
+                    <div class="error-message" role="alert" aria-live="assertive">
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+                    </div>
+                    {% endif %}
+
+                    <form method="post" id="registrationForm">
+                        <div class="row g-3">
+                            <!-- Columna Izquierda (Sin Cambios) -->
+                            <div class="col-md-6">
+                                <h5 class="mb-3 border-bottom pb-2">
+                                    <i class="fas fa-user-circle me-2 text-primary"></i>Datos de Cuenta
+                                </h5>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Nombre de Usuario</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user input-icon p-0"></i></span>
+                                        <input type="text" name="username" id="username" class="form-control" required autocomplete="username" placeholder="Elige un nombre único">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Contraseña</label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text d-flex align-items-center justify-content-center px-3">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                        <input type="password" name="password" class="form-control" id="password" placeholder="Mín 8 carac., 1 núm., 1 símb." required>
+                                        <button class="password-toggle" type="button" id="togglePassword">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div id="password-error" class="mt-1"></div>
+                                </div>
+                                <h5 class="mb-3 mt-4 border-bottom pb-2">
+                                    <i class="fas fa-address-card me-2 text-primary"></i>Datos Personales
+                                </h5>
+                                <div class="mb-3">
+                                    <label for="age" class="form-label">Edad</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-birthday-cake input-icon p-0"></i></span>
+                                        <input type="number" name="age" id="age" class="form-control" min="1" max="120" required placeholder="Tu edad" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="gender" class="form-label">Género</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-venus-mars input-icon p-0"></i></span>
+                                        <select class="form-select" name="gender" id="gender" required>
+                                            <option value="" disabled selected>Selecciona...</option>
+                                            <option value="M">Hombre</option>
+                                            <option value="F">Mujer</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="occupation" class="form-label">Ocupación</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-briefcase input-icon p-0"></i></span>
+                                        <select class="form-select" name="occupation" id="occupation" required>
+                                            <option value="" disabled selected>Selecciona tu ocupación</option>
+                                            {% for occ in occupations %}
+                                            <option value="{{ occ.id }}">{{ occ.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Columna Derecha (Sin Cambios) -->
+                            <div class="col-md-6">
+                                <h5 class="mb-3 border-bottom pb-2">
+                                    <i class="fas fa-child me-2 text-primary"></i>Información Familiar (Opcional)
+                                </h5>
+                                <div class="mb-3">
+                                    <label for="sons" class="form-label">Número de hijos</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-users input-icon p-0"></i></span>
+                                        <input type="number" class="form-control" name="sons" id="sons" min="0" max="20" value="0" placeholder="Ej: 0, 1, 2..." oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="younger_son_age" class="form-label">Edad del hijo menor</label>
+                                    <input type="number" class="form-control" name="younger_son_age" id="younger_son_age" min="0" max="100" value="0" placeholder="Ingresa 0 si no aplica" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="older_son_age" class="form-label">Edad del hijo mayor</label>
+                                    <input type="number" class="form-control" name="older_son_age" id="older_son_age" min="0" max="100" value="0" placeholder="Ingresa 0 si no aplica" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                </div>
+                                <h5 class="mb-3 mt-4 border-bottom pb-2">
+                                    <i class="fas fa-map-signs me-2 text-primary"></i>Preferencias de Viaje
+                                </h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Indica qué te gusta hacer:</label>
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#preferencesModal">
+                                            <i class="fas fa-sliders-h me-2"></i> Configurar Preferencias
+                                        </button>
+                                        <div id="preferences-summary" class="form-text mt-2 text-muted small">
+                                            Aún no has configurado tus preferencias.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-custom btn-lg" id="register-btn">
+                                <i class="fas fa-check-circle me-2"></i>Crear mi Cuenta
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    ¿Ya tienes cuenta? <a href="/login"><i class="fas fa-sign-in-alt me-1"></i>Inicia sesión aquí</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- MODAL DE PREFERENCIAS - JERÁRQUICO CON JINJA FILTERS   -->
+        <!-- ======================================================== -->
+        <div class="modal fade" id="preferencesModal" tabindex="-1" aria-labelledby="preferencesModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                <div class="modal-content shadow-lg">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="preferencesModalLabel">
+                            <i class="fas fa-star me-2"></i> Tus Preferencias de Viaje
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info small mb-4 d-flex align-items-center" role="alert">
+                            <i class="fas fa-info-circle me-2 flex-shrink-0 fs-5"></i>
+                            <div>Marca las categorías que te interesan y puntúa tu interés. Haz clic en una categoría para ver sub-preferencias.</div>
+                        </div>
+
+                        <!-- Contenedor Principal para Nivel 1 -->
+                        <div class="preferences-level-1-container">
+                            {% for l1_pref in preferences | selectattr('parent_id', 'none') %}
+                            {% set children = preferences | selectattr('parent_id', 'equalto', l1_pref.id) | list %}
+                            <div class="preference-level-1 {{ 'no-children' if children|length == 0 else '' }}">
+                                <div class="preference-card">
+                                    <div class="form-check d-flex align-items-center">
+                                        <!-- Checkbox sin atributos de collapse -->
+                                        <input
+                                            name="preferences"
+                                            class="form-check-input preference-checkbox preference-l1-checkbox"
+                                            type="checkbox"
+                                            id="pref_{{ l1_pref.id }}"
+                                            value="{{ l1_pref.id }}"
+                                            onchange="toggleInterestInput('{{ l1_pref.id }}', true)"
+                                            data-pref-id="{{ l1_pref.id }}"
+                                            data-pref-name="{{ l1_pref.name }}"
+                                            form="registrationForm">
+                                        <label class="form-check-label flex-grow-1 ms-2" for="pref_{{ l1_pref.id }}">
+                                            {{ l1_pref.name }}
+                                        </label>
+                                        <!-- Botón exclusivo para desplegar/ocultar subpreferencias -->
+                                        {% if children %}
+                                        <button type="button" class="btn btn-link p-0 m-0 toggle-collapse"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#children_of_{{ l1_pref.id }}"
+                                            aria-expanded="false"
+                                            aria-controls="children_of_{{ l1_pref.id }}">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="preference-rating-container mt-auto">
+                                        <input name="interest_{{ l1_pref.id }}" type="range" id="interest_{{ l1_pref.id }}" class="form-range preference-rating"
+                                            min="0" max="10" value="5" disabled oninput="updateRangeStyle(this)"
+                                            aria-labelledby="pref_{{ l1_pref.id }}" data-pref-id="{{ l1_pref.id }}" form="registrationForm">
+                                        <span id="range-value-{{ l1_pref.id }}" class="badge range-value" aria-live="polite">5</span>
+                                    </div>
+                                </div>
+
+                                {% if children %}
+                                <div class="collapse preference-level-2-container" id="children_of_{{ l1_pref.id }}">
+                                    <div class="preferences-columns">
+                                        {% for l2_pref in children %}
+                                        <!-- Código de nivel 2 (sin cambios) -->
+                                        <div class="preference-card preference-level-2">
+                                            <div class="form-check">
+                                                <input
+                                                    name="preferences"
+                                                    class="form-check-input preference-checkbox preference-l2-checkbox"
+                                                    type="checkbox"
+                                                    id="pref_{{ l2_pref.id }}"
+                                                    value="{{ l2_pref.id }}"
+                                                    onchange="toggleInterestInput('{{ l2_pref.id }}', false)"
+                                                    data-pref-id="{{ l2_pref.id }}"
+                                                    data-pref-name="{{ l2_pref.name }}"
+                                                    data-parent-id="{{ l1_pref.id }}"
+                                                    form="registrationForm">
+                                                <label class="form-check-label" for="pref_{{ l2_pref.id }}">
+                                                    {{ l2_pref.name }}
+                                                </label>
+                                            </div>
+                                            <div class="preference-rating-container mt-auto">
+                                                <input name="interest_{{ l2_pref.id }}" type="range" id="interest_{{ l2_pref.id }}" class="form-range preference-rating"
+                                                    min="0" max="10" value="5" disabled oninput="updateRangeStyle(this)"
+                                                    aria-labelledby="pref_{{ l2_pref.id }}" data-pref-id="{{ l2_pref.id }}" form="registrationForm">
+                                                <span id="range-value-{{ l2_pref.id }}" class="badge range-value" aria-live="polite">5</span>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% if not (preferences | selectattr('parent_id', 'none') | list) %}
+                            <p class="text-muted text-center">No hay preferencias disponibles en este momento.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                            <i class="fas fa-check me-1"></i>Guardar Preferencias
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Script Personalizado -->
+        <script>
+        // --- Funciones Colores y Estilo Slider (Sin cambios) ---
+        function lerpColor(c1, c2, f) { 
+            const i = parseInt, r = Math.round, h = 16; 
+            const p1 = i(c1.substring(1), h), r1 = p1 >> 16 & 255, g1 = p1 >> 8 & 255, b1 = p1 & 255; 
+            const p2 = i(c2.substring(1), h), r2 = p2 >> 16 & 255, g2 = p2 >> 8 & 255, b2 = p2 & 255; 
+            return `#${(1 << 24 | r(r1 + f * (r2 - r1)) << 16 | r(g1 + f * (g2 - g1)) << 8 | r(b1 + f * (b2 - b1))).toString(h).slice(1).padStart(6, '0')}`;
+        }
+        function getColorForValue(v) { 
+            const n = Number(v), s = getComputedStyle(document.documentElement), 
+            c0 = s.getPropertyValue('--range-color-0').trim() || '#dc3545', 
+            c5 = s.getPropertyValue('--range-color-5').trim() || '#ffc107', 
+            c10 = s.getPropertyValue('--range-color-10').trim() || '#198754'; 
+            return n <= 5 ? lerpColor(c0, c5, n / 5) : lerpColor(c5, c10, (n - 5) / 5); 
+        }
+        function updateRangeStyle(input) { 
+            if (!input) return; 
+            const id = input.dataset.prefId, span = document.getElementById(`range-value-${id}`), val = input.value; 
+            if (span) { 
+                span.textContent = val; 
+                span.style.backgroundColor = getColorForValue(val); 
+            } 
+            input.style.setProperty('--thumb-color', getColorForValue(val)); 
+        }
+
+        // --- MODIFICADO: Habilitar/Deshabilitar Slider y Lógica Hijos ---
+        
+function toggleInterestInput(prefId, isLevel1) {
+    const checkbox = document.getElementById(`pref_${prefId}`);
+    const interestInput = document.getElementById(`interest_${prefId}`);
+    const valueSpan = document.getElementById(`range-value-${prefId}`);
+    const rootStyles = getComputedStyle(document.documentElement);
+
+    if (!checkbox || !interestInput || !valueSpan) {
+        return;
+    }
+
+    const isDisabled = !checkbox.checked;
+    interestInput.disabled = isDisabled;
+
+    if (isDisabled) {
+        const disabledColor = rootStyles.getPropertyValue('--range-color-disabled').trim() || '#adb5bd';
+        valueSpan.style.backgroundColor = disabledColor;
+        interestInput.style.removeProperty('--thumb-color');
+        valueSpan.textContent = interestInput.value;
+    } else {
+        updateRangeStyle(interestInput);
+    }
+
+    // Eliminamos la lógica que deselecciona los checkbox de nivel 2
+    // if (isLevel1 && isDisabled) {
+    //     const childrenContainerId = `children_of_${prefId}`;
+    //     const childrenContainer = document.getElementById(childrenContainerId);
+    //     if (childrenContainer) {
+    //         const childCheckboxes = childrenContainer.querySelectorAll('.preference-l2-checkbox');
+    //         childCheckboxes.forEach(childCb => {
+    //             if (childCb.checked) {
+    //                 childCb.checked = false;
+    //                 childCb.dispatchEvent(new Event('change', { bubbles: true }));
+    //             } else {
+    //                 const childId = childCb.dataset.prefId;
+    //                 const childInterestInput = document.getElementById(`interest_${childId}`);
+    //                 const childValueSpan = document.getElementById(`range-value-${childId}`);
+    //                 if (childInterestInput && childValueSpan && !childInterestInput.disabled) {
+    //                     childInterestInput.disabled = true;
+    //                     const disabledColor = rootStyles.getPropertyValue('--range-color-disabled').trim() || '#adb5bd';
+    //                     childValueSpan.style.backgroundColor = disabledColor;
+    //                     childInterestInput.style.removeProperty('--thumb-color');
+    //                     childValueSpan.textContent = childInterestInput.value;
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
+    
+    if (!isLevel1) {
+        updatePreferenceSummary();
+    }
+}
+
+        // --- Resumen Preferencias (Sin cambios) ---
+        function updatePreferenceSummary() {
+            const summaryDiv = document.getElementById('preferences-summary');
+            const checkedCheckboxes = document.querySelectorAll('#preferencesModal .preference-checkbox:checked');
+            if (!summaryDiv) return; 
+            const count = checkedCheckboxes.length;
+            if (count === 0) { 
+                summaryDiv.textContent = 'Aún no has configurado tus preferencias.'; 
+                summaryDiv.classList.add('text-muted'); 
+                summaryDiv.classList.remove('text-success'); 
+            } else { 
+                let baseText = `${count} preferencia${count > 1 ? 's' : ''} seleccionada${count > 1 ? 's' : ''}`; 
+                let detailText = ""; 
+                if (count <= 5) { 
+                    const names = Array.from(checkedCheckboxes).map(cb => cb.dataset.prefName || `ID ${cb.value}`).join(', '); 
+                    detailText = `: ${names}`; 
+                } 
+                summaryDiv.textContent = baseText + detailText + "."; 
+                summaryDiv.classList.remove('text-muted'); 
+                summaryDiv.classList.add('text-success'); 
+            }
+        }
+
+        // --- Validación Contraseña y Toggle (Sin Cambios) ---
+        const passwordField = document.getElementById('password'),
+        errorElement = document.getElementById('password-error'),
+        toggleButton = document.getElementById('togglePassword');
+        function validatePassword(){
+            const p = passwordField.value,
+            v = p.length >= 8 && /\d/.test(p) && /[!@#$%^&*()_+=\-[\]{};':"\\|,.<>/?~]/.test(p);
+            if (!v && p.length > 0) {
+                errorElement.innerHTML = "<i class='fas fa-times-circle me-1'></i>Mín 8 carac., incl. número y símbolo.";
+                passwordField.classList.add('is-invalid');
+                passwordField.setAttribute("aria-invalid", "true");
+            } else {
+                errorElement.textContent = "";
+                passwordField.classList.remove('is-invalid');
+                if (p.length > 0)
+                    passwordField.classList.add('is-valid');
+                    else
+                    passwordField.classList.remove('is-valid');
+                passwordField.setAttribute("aria-invalid", "false");
+            }
+        }
+        if (toggleButton && passwordField) {
+            toggleButton.addEventListener('click', function(){
+                const t = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', t);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+        }
+        if (passwordField) {
+            passwordField.addEventListener('input', validatePassword);
+            passwordField.addEventListener('blur', validatePassword);
+        }
+
+        // --- Lógica Hijos (Sin cambios) ---
+        const sonsInput = document.getElementById('sons'),
+        youngerSonAgeInput = document.getElementById('younger_son_age'),
+        olderSonAgeInput = document.getElementById('older_son_age');
+        function handleSonInputs(){
+            if (!sonsInput || !youngerSonAgeInput || !olderSonAgeInput) return;
+            const c = parseInt(sonsInput.value || '0', 10),
+            h = c > 0;
+            youngerSonAgeInput.required = h;
+            olderSonAgeInput.required = h;
+            youngerSonAgeInput.disabled = !h;
+            olderSonAgeInput.disabled = !h;
+            if (!h) {
+                youngerSonAgeInput.value = '';
+                olderSonAgeInput.value = '';
+                youngerSonAgeInput.classList.remove('is-invalid','is-valid');
+                olderSonAgeInput.classList.remove('is-invalid','is-valid');
+            }
+            youngerSonAgeInput.placeholder = h ? 'Edad del menor' : 'Ingresa 0 si no aplica';
+            olderSonAgeInput.placeholder = h ? 'Edad del mayor' : 'Ingresa 0 si no aplica';
+        }
+        if (sonsInput) {
+            sonsInput.addEventListener('input', handleSonInputs);
+        }
+
+        // --- Inicialización y Eventos Principales ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Inicializar sliders y estado visual
+            document.querySelectorAll('#preferencesModal .preference-checkbox').forEach(cb => {
+                const prefId = cb.dataset.prefId;
+                const isLevel1 = cb.classList.contains('preference-l1-checkbox');
+                toggleInterestInput(prefId, isLevel1);
+            });
+
+            // 2. Inicializar estado Collapse de Bootstrap
+            document.querySelectorAll('#preferencesModal .preference-l1-checkbox').forEach(l1Cb => {
+                const childrenContainerId = l1Cb.getAttribute('data-bs-target');
+                if (childrenContainerId) {
+                    const childrenContainer = document.querySelector(childrenContainerId);
+                    if (childrenContainer) {
+                        let collapseInstance = bootstrap.Collapse.getInstance(childrenContainer);
+                        if (!collapseInstance) {
+                            collapseInstance = new bootstrap.Collapse(childrenContainer, { toggle: false });
+                        }
+                        if (l1Cb.checked && !childrenContainer.classList.contains('show')) {
+                            collapseInstance.show();
+                        } else if (!l1Cb.checked && childrenContainer.classList.contains('show')) {
+                            collapseInstance.hide();
+                        }
+                        const isExpanded = childrenContainer.classList.contains('show');
+                        l1Cb.setAttribute('aria-expanded', isExpanded);
+                        const label = l1Cb.labels ? l1Cb.labels[0] : null;
+                        if (label && label.getAttribute('data-bs-toggle') === 'collapse') {
+                            label.setAttribute('aria-expanded', isExpanded);
+                        }
+                    }
+                }
+            });
+
+            // 3. Actualizar resumen inicial
+            updatePreferenceSummary();
+
+            // 4. Listener para cierre del modal (sin sincronización de hidden inputs)
+            const preferencesModalElement = document.getElementById('preferencesModal');
+            if (preferencesModalElement) {
+                preferencesModalElement.addEventListener('hidden.bs.modal', function (event) {
+                    updatePreferenceSummary();
+                });
+                preferencesModalElement.addEventListener('change', function(event) {
+                    if (event.target.classList.contains('preference-checkbox')) {
+                        updatePreferenceSummary();
+                    }
+                });
+            }
+
+            // 5. Listener para envío del formulario
+            const registrationForm = document.getElementById('registrationForm');
+            if (registrationForm) {
+                registrationForm.addEventListener('submit', function(event) { 
+                    // No hidden inputs sync
+                });
+            }
+
+            // 6. Inicializar estado inputs hijos
+            handleSonInputs();
+
+            // 7. Animación Navbar Scroll
+            let lastScrollTop = 0;
+            const navbar = document.querySelector('.navbar');
+            window.addEventListener('scroll', function(){
+                let s = window.pageYOffset || document.documentElement.scrollTop;
+                if (s > lastScrollTop && s > 50) {
+                    navbar.style.padding = '0.5rem 0';
+                    navbar.style.opacity = '0.9';
+                } else {
+                    navbar.style.padding = '1rem 0';
+                    navbar.style.opacity = '1';
+                }
+                lastScrollTop = s <= 0 ? 0 : s;
+            });
+
+            // 8. Validación inicial contraseña
+            if (passwordField && passwordField.value) { 
+                validatePassword(); 
+            }
+        });
+        </script>
+    </body>
+</html>

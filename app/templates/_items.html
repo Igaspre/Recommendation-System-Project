@@ -1,0 +1,44 @@
+{% for item in items %}
+<div class="col-md-4 mb-4 fade-in">
+  <div class="card recommendation-card">
+    <img src="{{ url_for('static', filename='images/' ~ (item.name|replace('(', '')|replace(')', '')|replace("'", '')) ~ '.png') }}"
+         class="card-img-top"
+         alt="{{ item.name }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ item.name }}</h5>
+      <p class="card-text visit-count" data-item-id="{{ item.id }}">
+        Visitas: {{ item.visit_count }}
+      </p>
+      <div class="d-flex justify-content-between align-items-center">
+        {% if item.id in favorite_ids %}
+          <button class="btn btn-danger btn-sm favorite-button" data-item-id="{{ item.id }}" disabled style="border-radius: 30px;">
+            <i class="fas fa-heart me-1"></i> Guardado
+          </button>
+        {% else %}
+          <button class="btn btn-secondary btn-sm favorite-button" data-item-id="{{ item.id }}" style="border-radius: 30px;">
+            <i class="fas fa-heart me-1"></i> Guardar
+          </button>
+        {% endif %}
+        <button class="btn btn-custom btn-sm" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+          Ver detalles
+        </button>
+        <button class="btn btn-outline-primary btn-sm rating-button" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+          Puntuar
+        </button>
+      </div>
+      <!-- Contenedor de adecuación grupal -->
+      <div class="group-rating-wrapper mt-2" data-item-id="{{ item.id }}" style="display: none; overflow: visible;">
+        <div class="group-rating-header">
+          <span>Adecuación por usuario</span>
+          <button class="toggle-group-ratings" type="button" aria-expanded="false">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+        <div class="group-rating-container" data-item-id="{{ item.id }}" style="display: none;">
+          <!-- El contenido de adecuación grupal se cargará aquí -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}

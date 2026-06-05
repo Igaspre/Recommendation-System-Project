@@ -1,0 +1,7 @@
+Flask>=2.0
+Flask-SQLAlchemy>=2.5
+SQLAlchemy>=1.4
+Pillow>=9.0
+matplotlib>=3.0
+icrawler>=0.6
+wikipedia>=1.4

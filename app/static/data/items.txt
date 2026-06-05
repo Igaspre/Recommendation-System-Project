@@ -1,0 +1,450 @@
+17365
+Casa de las Rocas-Museo del Corpus
+11
+17366
+Casa-Museo Benlliure
+11
+17367
+Casa-Museo Blasco Ibañez
+11
+17369
+Centro cultural Fundación Bancaja
+30
+17371
+Centro del Carmen-IVAM
+26
+17372
+Centro Julio Gonzalez-IVAM
+23
+17374
+El Oceanográfico
+35
+17375
+Museo de Bellas Artes de Valencia-San Pio V
+22
+17376
+Museo de Cerámica (Palacio Marqués de Dos Aguas)
+26
+17377
+Museo de historia de Valencia
+19
+17378
+Museo de la Catedral
+20
+17379
+Museo de la Ciudad
+14
+17380
+Museo de las Ciencias Príncipe Felipe
+28
+17381
+Museo de prehistoria y de las culturas de Valencia
+14
+17382
+Museo del Patriarca
+12
+17383
+Museo Fallero
+10
+17385
+Museo Taurino
+9
+17386
+Museo Valenciano de Historia Natural
+9
+17388
+Museo valenciano de la ilustración y la modernidad
+13
+17389
+Ayuntamiento de Valencia
+33
+17390
+Biblioteca
+15
+17391
+Biblioteca Municipal
+25
+17392
+Casa Museo Benlliure
+13
+17393
+Ciudad de las Ciencias
+37
+17394
+Edificio de Correos
+29
+17395
+Palacio de Benicarló (Cortes Valencianas)
+19
+17396
+El Almudín
+19
+17397
+Estación del Norte
+35
+17398
+Estadio de Mestalla
+27
+17401
+La Lonja de la Seda o de los Mercaderes
+36
+17402
+Mercado Central
+35
+17403
+Mercado de Colón
+37
+17405
+Palacio Arzobispal
+8
+17406
+Palacio de Justicia
+19
+17407
+Palacio de la Generalitat
+20
+17408
+Palacio de los Condes de Alpuente
+4
+17409
+Palacio del Almirante
+0
+17410
+Palacio del Marqués de Dos Aguas
+24
+17411
+Palacio del Marqués del Campo
+3
+17412
+Palau de la Musica
+28
+17413
+Plaza de Toros
+28
+17414
+Reales Atarazanas
+21
+17415
+Teatro Principal
+32
+17417
+Torre del Miguelete
+32
+17418
+Basílica de la Virgen - Museo Mariano
+36
+17419
+Catedral
+35
+17420
+Iglesia de San Juan de la Cruz
+9
+17421
+Iglesia de San Juan del Hospital
+23
+17422
+Iglesia Santos Juanes
+20
+17425
+Monasterio de San Miguel de los Reyes (Biblioteca Valenciana Nicolau Primitiu)
+20
+17426
+Porta de la Mar
+32
+17427
+Torres de Quart
+32
+17429
+Torres de Serranos
+32
+17430
+Jardín de Ayora
+23
+17431
+Jardín Botánico
+32
+17432
+Jardines de Monforte
+29
+17433
+Jardines de la Glorieta
+29
+17434
+Parque Gulliver
+31
+17435
+Paseo de la Alameda
+36
+17436
+Paseo Marítimo
+35
+17437
+Playa de la Malvarrosa
+38
+17438
+Playa de las Arenas
+37
+17439
+Plaza de la Virgen
+36
+17440
+Plaza Redonda
+34
+17441
+Puerto
+34
+17442
+Tribunal de las Aguas
+25
+17444
+Jardines de Viveros
+37
+17477
+Antiguo Convento de Santo Domingo
+11
+17478
+Palacio de los Condes de Cervellón (Archivo Histórico Municipal)
+9
+17479
+Ateneo Mercantil
+22
+17480
+Baños del Almirante
+10
+17481
+Bioparc
+5
+17483
+Campo de Golf del Saler
+13
+17484
+Casa de la America's Cup
+24
+17485
+Casa del Dragón
+5
+17486
+Casa Ferrer
+5
+17487
+Casa Ortega
+2
+17488
+Casa-Museo Concha Piquer
+4
+17489
+Casa-Museo de la Semana Santa Marinera (Salvador Caurín)
+2
+17490
+Centro de Artesania
+4
+17491
+Colegio del Arte Mayor de la Seda
+8
+17492
+Complejo Arqueológico de la Almoina
+13
+17493
+Complejo Deportivo Cultural Petxina
+9
+17494
+Convento de la Trinidad
+6
+17495
+Cripta de la Cárcel de San Vicente
+18
+17496
+Edificio calle Ramilletes 1
+2
+17497
+Edificio del Reloj
+12
+17498
+Edificio Rialto
+19
+17499
+Estación-Terminal Marítima
+17
+17500
+Estatua Ecuestre del Rey Jaume I
+28
+17501
+Feria Valencia
+32
+17502
+Fuente del Turia (Plaza de la Virgen)
+37
+17504
+Galería del Tossal (Muralla islámica)
+8
+17507
+Iglesia de la Compañía
+13
+17508
+Iglesia de las Escuelas Pías
+8
+17509
+Iglesia de San Agustín
+28
+17510
+Iglesia de San Esteban
+15
+17511
+Iglesia de San Martín
+13
+17512
+Iglesia de San Nicolás
+18
+17513
+Iglesia de Santa Catalina
+26
+17514
+Iglesia de Santo Tomás
+11
+17515
+Iglesia del antiguo Convento del Carmen
+13
+17516
+Iglesia del Carmen
+12
+17517
+Iglesia del Salvador
+11
+17518
+Iglesia y Palacio del Temple
+15
+17519
+Jardín de las Hespérides
+14
+17520
+Jardines del Turia
+36
+17521
+L'Hemisferic
+27
+17522
+L'Umbracle
+29
+17523
+Museo de Ciencias Naturales
+19
+17524
+Museo del Arroz
+2
+17525
+Museo del Artista Fallero
+9
+17526
+Museo del Siglo XIX (Convento del Carmen)
+9
+17527
+Museo del Trenet
+3
+17528
+Museo Histórico Municipal (Ayuntamiento de Valencia)
+6
+17529
+Museo Militar
+2
+17530
+Palacio de Cervelló
+8
+17531
+Palacio de Congresos
+25
+17532
+Palacio de la Batlia o de Jáudenes (Diputación de Valencia)
+13
+17533
+Palacio de las Artes Reina Sofía
+12
+17534
+Palacio de los Almirantes de Aragón
+3
+17535
+Palacio de los Boil de Arenós
+4
+17536
+Palacio de los Marqueses de Scala (Diputación de Valencia)
+8
+17537
+Palacio del Intendente Pineda (sede de la UIMP)
+8
+17538
+Palacio Joan de Valeriola
+2
+17539
+Palacio Municipal de la Exposición
+9
+17540
+Parque de Cabecera
+21
+17543
+Plaza de Alfonso el Magnánimo
+29
+17544
+Plaza de la Almoina
+27
+17545
+Plaza de la Reina
+35
+17546
+Plaza de San Luis Beltrán
+16
+17547
+Plaza del Ayuntamiento
+35
+17548
+Plaza del Carmen
+36
+17549
+Plaza del Mercado
+29
+17550
+Plaza del Tossal
+27
+17551
+Puente de la Exposición (la Peineta)
+33
+17552
+Puente del Real
+30
+17553
+Real Club Naútico de Valencia
+17
+17554
+Real Colegio del Corpus Christi (El Patriarca)
+17
+17555
+Sede Central de la Universidad de Valencia
+25
+17556
+Teatro de Marionetas La Estrella
+0
+17557
+Teatro Olympia
+0
+17558
+Teatro Rialto
+0
+18000
+Centro de Arte Hortensia Herrero (CAHH) - Palacio Valeriola
+0
+18001
+Barrio del Carmen
+0
+18002
+Barrio de Ruzafa
+0
+18003
+La Albufera
+0
+18004
+Barrio del Cabañal
+0
+18005
+Museo Iluziona 
+0
+18006
+L'ETNO - Museo Valenciado de Etnología
+0

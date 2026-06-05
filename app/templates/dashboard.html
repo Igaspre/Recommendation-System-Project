@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Encuentra las mejores recomendaciones de destinos turísticos.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de Recomendaciones - Recomendación Turística</title>
+  
+  <!-- Estilos externos -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  
+  <style>
+    :root {
+      /* Paleta de colores modernizada */
+      --primary-color: #2563eb; /* Azul más vibrante */
+      --primary-dark: #1e40af; /* Azul oscuro para hover */
+      --primary-light: #dbeafe; /* Azul claro para fondos */
+      --secondary-color: #f59e0b; /* Naranja para acentos */
+      --dark-color: #1e293b; /* Casi negro para texto */
+      --light-color: #ffffff; /* Blanco para fondos */
+      --light-bg: #f8fafc; /* Fondo claro para el dashboard */
+      --overlay-color: rgba(15, 23, 42, 0.6); /* Capa oscura mejorada */
+      --transition: all 0.3s ease; /* Transición global */
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      color: var(--dark-color);
+      background-color: var(--light-bg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    /* Barra de navegación */
+    .navbar {
+      background-color: var(--primary-dark) !important;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      z-index: 10;
+      padding: 0.75rem 0;
+      transition: var(--transition);
+    }
+
+    .navbar-brand {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--light-color);
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      margin: 0 0.5rem;
+      position: relative;
+      transition: var(--transition);
+      color: var(--light-color) !important;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--secondary-color);
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+
+    /* Encabezados y títulos */
+    .section-header {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark-color);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .section-header:after {
+      content: '';
+      position: absolute;
+      width: 50px;
+      height: 4px;
+      background-color: var(--secondary-color);
+      bottom: 0;
+      left: 0;
+    }
+
+    /* Tarjetas de recomendación */
+    .recommendation-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      height: 100%;
+    }
+
+    .recommendation-card:hover, .recommendation-card:focus-within {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-text {
+      color: #64748b;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    /* Botones */
+    .btn-custom {
+      background-color: var(--primary-color);
+      border: none;
+      font-size: 1rem;
+      padding: 10px 25px;
+      color: var(--light-color);
+      border-radius: 30px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+      transition: var(--transition);
+    }
+    
+    .btn-custom:hover, .btn-custom:focus {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
+      color: var(--light-color);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      border: none;
+      color: var(--light-color);
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e68a00;
+      color: var(--light-color);
+    }
+
+    /* Añade esto a tu sección de estilos */
+    .recommendation-card {
+      height: auto !important; /* Fuerza altura automática */
+      flex: 0 0 auto !important; /* Evita que flex afecte el tamaño */
+    }
+
+    .col-md-4 {
+      align-self: flex-start; /* Hace que cada columna comience desde arriba */
+    }
+
+    /* Asegurar que el contenedor expandible no afecte el layout */
+    .group-rating-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--light-color);
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      left: -1000px;
+      top: -1000px;
+      background: var(--dark-color);
+      color: var(--light-color);
+      padding: 10px 15px;
+      z-index: 100;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .skip-link:focus {
+      left: 10px;
+      top: 10px;
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    /* Badge para destacar */
+    .badge-custom {
+      background-color: var(--secondary-color);
+      color: var(--light-color);
+      font-size: 0.7rem;
+      padding: 0.35em 0.65em;
+      border-radius: 30px;
+      margin-left: 8px;
+      font-weight: 500;
+    }
+
+    /* Barra de búsqueda */
+    .search-bar {
+      position: relative;
+      border-radius: 30px;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin-bottom: 1em;
+      width: 40%;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 40px 10px 16px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #5c6ac4;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    
+    /* Modal description */
+    .modal-description-image {
+      max-width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+
+    .modal-description-text {
+      line-height: 1.7;
+      color: var(--dark-color);
+    }
+    
+    /* Animación del favorito */
+    .favorite-button.animate-fav {
+      animation: heartBeat 0.7s ease-in-out;
+    }
+
+    @keyframes heartBeat {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(1.3); }
+      50%  { transform: scale(1); }
+      75%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    /* Estilos para el contenedor plegable de adecuación grupal */
+    .group-rating-wrapper {
+      margin-top: 15px;
+      background-color: var(--primary-light);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .group-rating-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toggle-group-ratings {
+      background: transparent;
+      border: none;
+      color: var(--primary-color);
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .toggle-group-ratings:hover {
+      color: var(--primary-dark);
+    }
+
+    .group-rating-container {
+      padding-top: 10px;
+      margin-top: 8px;
+      border-top: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    .group-rating {
+      display: flex;
+      align-items: center;
+    }
+
+    .group-rating i {
+      margin-right: 2px;
+    }
+    /* Estrellas de adecuación para recomendación grupal */
+    .group-rating {
+      color: var(--secondary-color);
+      font-size: 1.2rem;
+      margin-top: 8px;
+    }
+    
+    /* User selection modal */
+    .user-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .selected-users-container {
+      background-color: var(--primary-light);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .selected-user-badge {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      margin: 5px;
+      display: inline-block;
+    }
+    
+    /* Media queries para responsividad */
+    @media (max-width: 768px) {
+      .section-header {
+        font-size: 1.8rem;
+      }
+      .search-bar {
+        padding: 1rem;
+        width: 100%;
+      }
+      .card-img-top {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to main content link -->
+  <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('dashboard') if logged_in_user else url_for('home') }}">
+        <i class="fas fa-compass me-2"></i>Recomendación Turística
+      </a>
+      <button 
+        class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarContent" 
+        aria-controls="navbarContent" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/profile"><i class="fas fa-user-circle me-1"></i> Mi Perfil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/favorites"><i class="fas fa-heart me-1"></i> Favoritos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container" id="main-content">
+    <h1 class="section-header fade-in">Recomendaciones para ti</h1>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <label for="searchInput" class="visually-hidden">Buscar destinos</label>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Buscar destinos, actividades, etc." 
+        id="searchInput"
+        aria-label="Buscar destinos, actividades, etc."
+      >
+      <div class="search-icon">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+    
+    <!-- Formulario para seleccionar los sistemas recomendadores -->
+    <form id="recommenderForm" onsubmit="return false;" class="mb-4">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="recommender" value="SR_DE" id="sr_de" {% if 'SR_DE' in selected_systems %}checked{% endif %}>
+        <label class="form-check-label" for="sr_de">Demografico</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="recommender" value="SR_BC" id="sr_bc" {% if 'SR_BC' in selected_systems %}checked{% endif %}>
+        <label class="form-check-label" for="sr_bc">Basado en contenido</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" name="recommender" value="SR_COL" id="sr_col" {% if 'SR_COL' in selected_systems %}checked{% endif %}>
+        <label class="form-check-label" for="sr_col">Colaborativo</label>
+      </div>
+
+      <!-- Nuevo botón para recomendación grupal -->
+      <button id="selectUsersBtn" type="button" class="btn btn-outline-primary ms-2">
+        <i class="fas fa-users me-1"></i> Seleccionar Usuarios para Grupo
+      </button>
+      
+      <div id="selectedUsersContainer" class="selected-users-container mt-2" style="display: none;">
+        <h6>Usuarios seleccionados para recomendación grupal:</h6>
+        <div id="selectedUsersList" class="mb-2"></div>
+        <button id="clearGroupBtn" type="button" class="btn btn-sm btn-outline-danger">
+          <i class="fas fa-times me-1"></i> Eliminar selección
+        </button>
+      </div>
+
+      <button type="submit" class="btn btn-primary ms-2">Actualizar</button>
+    </form>
+
+    <!-- Contenedor de recomendaciones -->
+    <div class="row" id="recommendationsContainer">
+      {% for item in items %}
+      <div class="col-md-4 mb-4 fade-in">
+        <div class="card recommendation-card">
+          <img src="{{ url_for('static', filename='images/' ~ (item.name|replace('(', '')|replace(')', '')|replace("'", '')) ~ '.png') }}"
+               class="card-img-top"
+               alt="{{ item.name }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text visit-count" data-item-id="{{ item.id }}">
+              Visitas: {{ item.visit_count }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              {% if item.id in favorite_ids %}
+                <button class="btn btn-danger btn-sm favorite-button" data-item-id="{{ item.id }}" disabled style="border-radius: 30px;">
+                  <i class="fas fa-heart me-1"></i> Guardado
+                </button>
+              {% else %}
+                <button class="btn btn-secondary btn-sm favorite-button" data-item-id="{{ item.id }}" style="border-radius: 30px;">
+                  <i class="fas fa-heart me-1"></i> Guardar
+                </button>
+              {% endif %}
+              <button class="btn btn-custom btn-sm" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+                Ver detalles
+              </button>
+              <!-- Botón de Rating -->
+              <button class="btn btn-outline-primary btn-sm rating-button" data-item-id="{{ item.id }}" data-item-name="{{ item.name }}">
+                Puntuar
+              </button>
+            </div>
+            <!-- Container para adecuación grupal (inicialmente oculto) -->
+            <div class="group-rating-container mt-2" data-item-id="{{ item.id }}" style="display: none;"></div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}     
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <h5><i class="fas fa-compass me-2"></i>Recomendación Turística</h5>
+          <p class="mb-0">Tu compañero de viaje para descubrir el mundo</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <p>&copy; 2025 Recomendación Turística</p>
+          <div class="mt-2">
+            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modales -->
+  <!-- Item Details Modal -->
+  <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="itemDetailsModalLabel">Detalles del Destino</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="itemDetailsModalBody">
+          <!-- El contenido se carga dinámicamente -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Rating -->
+  <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ratingModalLabel">Califica este destino</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="ratingForm">
+            <input type="hidden" id="ratingItemId" name="item_id">
+            <div class="mb-3">
+              <label for="ratingInput" class="form-label">Tu rating (0-100):</label>
+              <input type="number" class="form-control" id="ratingInput" name="rating" min="0" max="100" required>
+            </div>
+          </form>
+          <div id="ratingFeedback" class="text-success"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="deleteRatingBtn" class="btn btn-danger">Eliminar Rating</button>
+          <button type="button" id="updateRatingBtn" class="btn btn-primary">Actualizar Rating</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Selección de Usuarios -->
+  <div class="modal fade" id="userSelectionModal" tabindex="-1" aria-labelledby="userSelectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userSelectionModalLabel">Seleccionar Usuarios para Recomendación Grupal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="userSearchInput" placeholder="Buscar usuarios...">
+          </div>
+          <div class="user-list" id="userList">
+            <!-- Los usuarios se cargarán dinámicamente aquí -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="confirmUserSelectionBtn">Confirmar Selección</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Instancias de modales
+      const itemDetailsModal = new bootstrap.Modal(document.getElementById('itemDetailsModal'));
+      const ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
+      const userSelectionModal = new bootstrap.Modal(document.getElementById('userSelectionModal'));
+
+      // Referencias a elementos DOM
+      const itemDetailsModalBody = document.getElementById('itemDetailsModalBody');
+      const ratingInput = document.getElementById('ratingInput');
+      const ratingItemId = document.getElementById('ratingItemId');
+      const ratingFeedback = document.getElementById('ratingFeedback');
+      const searchInput = document.getElementById('searchInput');
+      const selectUsersBtn = document.getElementById('selectUsersBtn');
+      const userList = document.getElementById('userList');
+      const userSearchInput = document.getElementById('userSearchInput');
+      const confirmUserSelectionBtn = document.getElementById('confirmUserSelectionBtn');
+      const selectedUsersContainer = document.getElementById('selectedUsersContainer');
+      const selectedUsersList = document.getElementById('selectedUsersList');
+      const clearGroupBtn = document.getElementById('clearGroupBtn');
+
+      // Array para almacenar los usuarios seleccionados
+      let selectedUsers = [];
+      // Flag para controlar si estamos en modo de recomendación grupal
+      let isGroupRecommendation = false;
+
+      // Animación para cargar elementos
+      const fadeElements = document.querySelectorAll('.fade-in');
+      fadeElements.forEach(function(element, index) {
+        element.style.opacity = '0';
+        setTimeout(function() {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+
+      // Cargar lista de usuarios
+      function loadUserList() {
+        fetch('/get_users')
+          .then(response => response.json())
+          .then(data => {
+            userList.innerHTML = '';
+            data.users.forEach(user => {
+              // No incluir al usuario actual en la lista
+              if (user.id !== data.current_user_id) {
+                const isSelected = selectedUsers.some(u => u.id === user.id);
+                userList.innerHTML += `
+                  <div class="form-check mb-2">
+                    <input class="form-check-input user-checkbox" type="checkbox" 
+                      value="${user.id}" id="user-${user.id}" 
+                      data-user-name="${user.username}" ${isSelected ? 'checked' : ''}>
+                    <label class="form-check-label" for="user-${user.id}">
+                      ${user.username}
+                    </label>
+                  </div>
+                `;
+              }
+            });
+            
+            // Añadir event listeners a los checkboxes
+            document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+              checkbox.addEventListener('change', function() {
+                const userId = this.value;
+                const userName = this.dataset.userName;
+                
+                if (this.checked) {
+                  // Añadir usuario si no está ya seleccionado
+                  if (!selectedUsers.some(u => u.id === userId)) {
+                    selectedUsers.push({id: userId, username: userName});
+                  }
+                } else {
+                  // Eliminar usuario
+                  selectedUsers = selectedUsers.filter(u => u.id !== userId);
+                }
+              });
+            });
+          })
+          .catch(error => console.error('Error fetching users:', error));
+      }
+      
+      // Búsqueda de usuarios
+      userSearchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll('#userList .form-check').forEach(item => {
+          const userName = item.querySelector('label').textContent.toLowerCase();
+          item.style.display = userName.includes(query) ? '' : 'none';
+        });
+      });
+      
+      // Mostrar modal de selección de usuarios
+      selectUsersBtn.addEventListener('click', function() {
+        loadUserList();
+        userSelectionModal.show();
+      });
+      
+      // Confirmar selección de usuarios
+      confirmUserSelectionBtn.addEventListener('click', function() {
+        if (selectedUsers.length > 0) {
+          // Mostrar usuarios seleccionados
+          selectedUsersList.innerHTML = '';
+          selectedUsers.forEach(user => {
+            selectedUsersList.innerHTML += `
+              <span class="selected-user-badge">
+                ${user.username}
+              </span>
+            `;
+          });
+          selectedUsersContainer.style.display = 'block';
+          isGroupRecommendation = true;
+        } else {
+          selectedUsersContainer.style.display = 'none';
+          isGroupRecommendation = false;
+        }
+        userSelectionModal.hide();
+      });
+      
+      // Limpiar selección de grupo
+      clearGroupBtn.addEventListener('click', function() {
+        selectedUsers = [];
+        selectedUsersList.innerHTML = '';
+        selectedUsersContainer.style.display = 'none';
+        isGroupRecommendation = false;
+      });
+
+      // Actualización de recomendadores
+      const checkboxes = document.querySelectorAll('input[name="recommender"]');
+      
+      function updateItems() {
+        const selected = Array.from(checkboxes)
+                              .filter(cb => cb.checked)
+                              .map(cb => cb.value);
+        const params = new URLSearchParams();
+        selected.forEach(val => params.append('recommender', val));
+        
+        // Añadir parámetros para recomendación grupal si está activa
+        if (isGroupRecommendation && selectedUsers.length > 0) {
+          params.append('group_recommendation', 'true');
+          selectedUsers.forEach(user => {
+            params.append('group_users', user.id);
+          });
+        }
+
+        fetch('/dashboard_ajax?' + params.toString())
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('recommendationsContainer').innerHTML = data.html;
+            initDetailsButtons();
+            initFavoriteButtons();
+            initRatingButtons();
+            
+            // Si es recomendación grupal, mostrar adecuación por usuario
+            if (isGroupRecommendation) {
+              // Primero mostramos todos los contenedores de adecuación grupal
+              document.querySelectorAll('.group-rating-wrapper').forEach(wrapper => {
+                wrapper.style.display = 'block';
+              });
+              
+              // Luego, si tenemos ratings, los llenamos
+              if (data.group_ratings) {
+                Object.keys(data.group_ratings).forEach(itemId => {
+                  const container = document.querySelector(`.group-rating-container[data-item-id="${itemId}"]`);
+                  if (container) {
+                    // Limpiar el contenedor antes de agregar nuevos datos
+                    container.innerHTML = '';
+                    
+                    // Para cada usuario, mostrar su adecuación con estrellas
+                    Object.keys(data.group_ratings[itemId]).forEach(userId => {
+                      const username = selectedUsers.find(u => u.id === userId)?.username || 'Usuario';
+                      const rating = data.group_ratings[itemId][userId];
+                      const stars = getStarsHtml(rating);
+                      
+                      container.innerHTML += `
+                        <div class="d-flex align-items-center justify-content-between small py-1">
+                          <span>${username}:</span>
+                          <span class="group-rating">${stars}</span>
+                        </div>
+                      `;
+                    });
+                  }
+                });
+              }
+              
+              // Reiniciar los event listeners para los botones de toggle
+              initGroupRatingToggles();
+            } else {
+              // Si no es recomendación grupal, ocultar todos los contenedores
+              document.querySelectorAll('.group-rating-wrapper').forEach(wrapper => {
+                wrapper.style.display = 'none';
+              });
+            }
+          })
+          .catch(error => console.error('Error fetching items:', error));
+      }
+
+      // Generar HTML para estrellas basado en rating (0-100)
+      function getStarsHtml(rating) {
+      // Convertir rating de 0-100 a estrellas (0-5)
+      const starCount = Math.round(rating / 20);
+      let stars = '';
+      
+      // Estrellas llenas
+      for (let i = 0; i < starCount; i++) {
+          stars += '<i class="fas fa-star"></i>';
+      }
+      
+      // Estrellas vacías
+      for (let i = starCount; i < 5; i++) {
+          stars += '<i class="far fa-star"></i>';
+      }
+      
+      return stars;
+      }
+
+      document.getElementById('recommenderForm').addEventListener('submit', updateItems);
+
+      // Búsqueda en tiempo real
+      searchInput.addEventListener('input', function() {
+        const query = searchInput.value.toLowerCase();
+        const cardContainers = document.querySelectorAll('#recommendationsContainer .col-md-4');
+
+        cardContainers.forEach(container => {
+          const titleElement = container.querySelector('.card-title');
+          if (titleElement) {
+            const titleText = titleElement.textContent.toLowerCase();
+            container.style.display = titleText.includes(query) ? '' : 'none';
+          }
+        });
+      });
+
+      // Función para cargar el rating actual en el modal
+      function loadRating(itemId) {
+        fetch(`/get_rating/${itemId}`)
+          .then(response => response.json())
+          .then(data => {
+            ratingItemId.value = itemId;
+            if(data.rating !== null) {
+              ratingInput.value = data.rating;
+            } else {
+              ratingInput.value = '';
+            }
+          })
+          .catch(err => console.error(err));
+      }
+
+      // Inicializar botones de favoritos
+      function initFavoriteButtons() {
+        const favButtons = document.querySelectorAll('.favorite-button');
+        favButtons.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const itemId = btn.dataset.itemId;
+            
+            fetch('/add_favorite', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({ item_id: itemId })
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data.message);
+
+              // Cambia el texto del botón y añade la animación
+              btn.innerHTML = '<i class="fas fa-heart me-1"></i> Guardado';
+              btn.classList.remove('btn-secondary');
+              btn.classList.add('btn-danger');
+              btn.disabled = true;
+              btn.classList.add('animate-fav');
+              setTimeout(() => btn.classList.remove('animate-fav'), 1000);
+            })
+            .catch(error => console.error(error));
+          });
+        });
+      }
+
+      // Inicializar botones de detalles
+      function initDetailsButtons() {
+        const itemDetailsButtons = document.querySelectorAll('.btn-custom[data-item-id]');
+        
+        itemDetailsButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            const itemName = this.getAttribute('data-item-name');
+
+            // Fetch de los detalles del item
+            fetch(`/item_details/${itemId}`)
+              .then(response => response.json())
+              .then(data => {
+                // Actualiza la información en el modal
+                itemDetailsModalBody.innerHTML = `
+                  <img
+                    src="/static/images/${data.image}"
+                    alt="${itemName}"
+                    class="modal-description-image"
+                  >
+                  <h4 class="mb-3">${itemName}</h4>
+                  <p class="modal-description-text">${data.description}</p>
+                  <p class="text-muted">Visitas: ${data.visit_count}</p>
+                `;
+                
+                // Actualiza el contador de visitas en la tarjeta del dashboard
+                const visitCountElement = document.querySelector(
+                  `.visit-count[data-item-id="${itemId}"]`
+                );
+                if (visitCountElement) {
+                  visitCountElement.textContent = `Visitas: ${data.visit_count}`;
+                }
+                
+                itemDetailsModal.show();
+              })
+              .catch(error => {
+                console.error('Error fetching item details:', error);
+                alert('No se pudieron cargar los detalles del destino.');
+              });
+          });
+        });
+      }
+
+      // Inicializar botones de rating
+      function initRatingButtons() {
+        document.querySelectorAll('.rating-button').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const itemId = this.getAttribute('data-item-id');
+            loadRating(itemId);
+            ratingFeedback.textContent = '';
+            ratingModal.show();
+          });
+        });
+      }
+
+      // Actualizar rating
+      document.getElementById('updateRatingBtn').addEventListener('click', function() {
+        const formData = new URLSearchParams(new FormData(document.getElementById('ratingForm')));
+        fetch('/update_rating', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: formData.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(data.error) {
+            ratingFeedback.textContent = data.error;
+            ratingFeedback.classList.remove('text-success');
+            ratingFeedback.classList.add('text-danger');
+          } else {
+            ratingFeedback.textContent = data.message;
+            ratingFeedback.classList.remove('text-danger');
+            ratingFeedback.classList.add('text-success');
+            // Actualizar el contador de visitas en la tarjeta
+            document.querySelectorAll(`.visit-count[data-item-id="${ratingItemId.value}"]`).forEach(el => {
+              el.textContent = `Visitas: ${data.visit_count}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));
+      });
+
+      // Eliminar rating
+      document.getElementById('deleteRatingBtn').addEventListener('click', function() {
+        const itemId = ratingItemId.value;
+        fetch('/delete_rating', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({item_id: itemId}).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(data.error) {
+            ratingFeedback.textContent = data.error;
+            ratingFeedback.classList.remove('text-success');
+            ratingFeedback.classList.add('text-danger');
+          } else {
+            ratingFeedback.textContent = data.message;
+            ratingFeedback.classList.remove('text-danger');
+            ratingFeedback.classList.add('text-success');
+            ratingInput.value = '';
+            // Actualizar el contador de visitas en la tarjeta
+            document.querySelectorAll(`.visit-count[data-item-id="${itemId}"]`).forEach(el => {
+              el.textContent = `Visitas: ${data.visit_count}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));
+      });
+
+      // Necesitamos también añadir esto al final del archivo, en la sección de inicializar componentes
+      function initGroupRatingToggles() {
+        document.querySelectorAll('.toggle-group-ratings').forEach(btn => {
+          // Primero eliminamos los event listeners existentes para evitar duplicados
+          const newBtn = btn.cloneNode(true);
+          btn.parentNode.replaceChild(newBtn, btn);
+          
+          // Luego agregamos el nuevo event listener
+          newBtn.addEventListener('click', function() {
+            const container = this.closest('.group-rating-wrapper').querySelector('.group-rating-container');
+            const icon = this.querySelector('i');
+            const card = this.closest('.recommendation-card');
+            
+            if (container.style.display === 'none') {
+              // Mostrar el contenedor
+              container.style.display = 'block';
+              icon.classList.remove('fa-chevron-down');
+              icon.classList.add('fa-chevron-up');
+              this.setAttribute('aria-expanded', 'true');
+            } else {
+              // Ocultar el contenedor
+              container.style.display = 'none';
+              icon.classList.remove('fa-chevron-up');
+              icon.classList.add('fa-chevron-down');
+              this.setAttribute('aria-expanded', 'false');
+            }
+            
+            // Importante: evitar que el evento se propague al contenedor padre
+            event.stopPropagation();
+          });
+        });
+      }
+
+      // Añadir esta llamada junto a las otras inicializaciones
+      initDetailsButtons();
+      initFavoriteButtons();
+      initRatingButtons();
+      initGroupRatingToggles();
+    });
+  </script>
+</body>
+</html>

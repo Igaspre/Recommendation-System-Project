@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Inicia sesión en Recomendación Turística para acceder a tus destinos personalizados.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar Sesión - Recomendación Turística</title>
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  >
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <style>
+    :root {
+      /* Paleta de colores modernizada */
+      --primary-color: #2563eb; /* Azul más vibrante */
+      --primary-dark: #1e40af; /* Azul oscuro para hover */
+      --primary-light: #dbeafe; /* Azul claro para fondos */
+      --secondary-color: #f59e0b; /* Naranja para acentos */
+      --dark-color: #1e293b; /* Casi negro para texto */
+      --light-color: #ffffff; /* Blanco para fondos */
+      --light-bg: #f8fafc; /* Fondo claro para contenido */
+      --overlay-color: rgba(15, 23, 42, 0.6); /* Capa oscura mejorada */
+      --transition: all 0.3s ease; /* Transición global */
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Barra de navegación */
+    .navbar {
+      background-color: var(--primary-dark) !important;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      z-index: 10;
+      padding: 0.75rem 0;
+      transition: var(--transition);
+    }
+
+    .navbar-brand {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--light-color);
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      margin: 0 0.5rem;
+      position: relative;
+      transition: var(--transition);
+      color: var(--light-color) !important;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--secondary-color);
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+
+    /* Decorative elements */
+    .bg-shapes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .shape-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--primary-light);
+      opacity: 0.6;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: -150px;
+    }
+
+    .shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: -100px;
+    }
+
+    /* Login container */
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 450px;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      background-color: var(--light-color);
+      overflow: hidden;
+      transition: var(--transition);
+      transform: translateY(0);
+    }
+
+    .login-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: var(--light-color);
+      border: none;
+      padding: 1.75rem 2rem;
+      position: relative;
+      text-align: center;
+    }
+
+    .header-icon {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.75rem;
+      margin-bottom: 0;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.8s ease 0.2s forwards;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    /* Form elements */
+    .form-label {
+      font-weight: 500;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: none;
+      transition: var(--transition);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      transition: var(--transition);
+    }
+
+    .input-with-icon .form-control {
+      padding-left: 2.75rem;
+    }
+
+    .input-with-icon .form-control:focus + .input-icon {
+      color: var(--primary-color);
+    }
+
+    /* Button styles */
+    .btn-custom {
+      background-color: var(--primary-color);
+      border: none;
+      font-size: 1.1rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--light-color);
+      border-radius: 8px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+      transition: var(--transition);
+      width: 100%;
+      margin-top: 1rem;
+    }
+    
+    .btn-custom:hover, .btn-custom:focus {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
+      color: var(--light-color);
+    }
+
+    /* Card footer */
+    .card-footer {
+      background-color: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      padding: 1.25rem;
+      color: #475569;
+    }
+
+    .card-footer a {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .card-footer a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    /* Error message */
+    .error-message {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Forgot password link */
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.9rem;
+      color: #475569;
+      text-decoration: none;
+      margin-top: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .forgot-link:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fadeIn {
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+      .card-header {
+        padding: 1.5rem;
+      }
+      .card-body, .card-footer {
+        padding: 1.25rem;
+      }
+      .btn-custom {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Decorative background shapes -->
+  <div class="bg-shapes" aria-hidden="true">
+    <div class="shape-circle shape-1"></div>
+    <div class="shape-circle shape-2"></div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('dashboard') if logged_in_user else url_for('home') }}">
+        <i class="fas fa-compass me-2"></i>Recomendación Turística
+      </a>
+      <button 
+        class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarContent" 
+        aria-controls="navbarContent" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/register"><i class="fas fa-user-plus me-1"></i> Registrarse</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Inicio</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login Container -->
+  <div class="login-container">
+    <div class="login-card fadeIn">
+      <div class="card-header">
+        <div class="header-icon">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <h1 class="card-title">Iniciar Sesión</h1>
+      </div>
+      <div class="card-body">
+        {% if error %}
+          <div class="error-message" role="alert" aria-live="assertive">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+          </div>
+        {% endif %}
+        
+        <form method="post">
+          <div class="input-group">
+            <label for="username" class="form-label">Usuario</label>
+            <div class="input-with-icon">
+              <input 
+                type="text" 
+                name="username" 
+                id="username" 
+                class="form-control" 
+                placeholder="Ingresa tu nombre de usuario" 
+                required 
+                autocomplete="username"
+              >
+              <i class="fas fa-user input-icon"></i>
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <div class="input-with-icon">
+              <input 
+                type="password" 
+                name="password" 
+                id="password" 
+                class="form-control" 
+                placeholder="Ingresa tu contraseña" 
+                required 
+                autocomplete="current-password"
+              >
+              <i class="fas fa-lock input-icon"></i>
+            </div>
+            <a href="/recuperar-password" class="forgot-link">¿Olvidaste tu contraseña?</a>
+          </div>
+          
+          <button type="submit" class="btn btn-custom">
+            <i class="fas fa-sign-in-alt me-2"></i>Iniciar sesión
+          </button>
+        </form>
+      </div>
+      <div class="card-footer">
+        ¿No tienes cuenta? <a href="/register">Regístrate ahora</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add focus class to input containers
+      const inputs = document.querySelectorAll('.form-control');
+      
+      inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+          this.parentElement.classList.add('input-focused');
+        });
+        
+        input.addEventListener('blur', function() {
+          this.parentElement.classList.remove('input-focused');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

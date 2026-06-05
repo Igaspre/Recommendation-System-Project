@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+venv/
+env/
+ENV/
+instance/
+app/static/temp_images/
+metrics/datos_evaluacion.json
+metrics/evaluation_results.txt
+metrics/*.png
+.DS_Store

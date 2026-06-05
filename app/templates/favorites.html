@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis Favoritos</title>
+  <meta name="description" content="Encuentra las mejores recomendaciones de destinos turísticos.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Hojas de estilo externas -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+  <!-- Estilos CSS -->
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #dbeafe;
+      --secondary-color: #f59e0b;
+      --dark-color: #1e293b;
+      --light-color: #ffffff;
+      --light-bg: #f8fafc;
+      --overlay-color: rgba(15, 23, 42, 0.6);
+      --transition: all 0.3s ease;
+    }
+
+    /* Estilos base */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      color: var(--dark-color);
+      background-color: var(--light-bg);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem 0;
+    }
+
+    /* Barra de navegación */
+    .navbar {
+      background-color: var(--primary-dark) !important;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      z-index: 10;
+      padding: 0.75rem 0;
+      transition: var(--transition);
+    }
+
+    .navbar-brand {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--light-color);
+    }
+
+    .nav-link {
+      font-weight: 500;
+      margin: 0 0.5rem;
+      position: relative;
+      transition: var(--transition);
+      color: var(--light-color) !important;
+    }
+
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: var(--secondary-color);
+      transition: var(--transition);
+    }
+
+    .nav-link:hover:after {
+      width: 100%;
+    }
+
+    /* Tarjetas de recomendación */
+    .recommendation-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      height: 100%;
+    }
+
+    .recommendation-card:hover, .recommendation-card:focus-within {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Botones */
+    .btn-custom {
+      background-color: var(--primary-color);
+      border: none;
+      font-size: 1rem;
+      padding: 10px 25px;
+      color: var(--light-color);
+      border-radius: 30px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+      transition: var(--transition);
+    }
+
+    .btn-custom:hover, .btn-custom:focus {
+      background-color: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(37, 99, 235, 0.3);
+      color: var(--light-color);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      border: none;
+      color: var(--light-color);
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background-color: #e68a00;
+      color: var(--light-color);
+    }
+
+    /* Modal */
+    .modal-description-image {
+      max-width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+
+    .modal-description-text {
+      line-height: 1.7;
+      color: var(--dark-color);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary-dark);
+      color: var(--light-color);
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card-img-top {
+        height: 180px;
+      }
+    }
+
+    /* Animaciones */
+    .favorite-button.animate-fav {
+      animation: heartBeat 0.7s ease-in-out;
+    }
+
+    @keyframes heartBeat {
+      0%   { transform: scale(1); }
+      25%  { transform: scale(1.3); }
+      50%  { transform: scale(1); }
+      75%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-compass me-2"></i>Recomendación Turística
+      </a>
+      <button 
+        class="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarContent" 
+        aria-controls="navbarContent" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Volver a Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Cerrar sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="container py-4">
+    <h1 class="mb-4">Mis Favoritos</h1>
+    <div class="row" id="favoritesContainer">
+      {% for item in items %}
+        <div class="col-md-4 mb-4">
+          <div class="card recommendation-card">
+            <img 
+              src="{{ url_for('static', filename='images/' ~ (item.name|replace('(', '')|replace(')', '')|replace("'", '')) ~ '.png') }}" 
+              class="card-img-top" 
+              alt="{{ item.name }}"
+            >
+            <div class="card-body">
+              <h5 class="card-title">{{ item.name }}</h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <button 
+                  class="btn btn-danger btn-sm remove-fav-button" 
+                  data-item-id="{{ item.id }}"
+                >
+                  <i class="fa fa-times me-1"></i> Quitar
+                </button>
+                <button 
+                  class="btn btn-custom btn-sm item-details-button"
+                  data-item-id="{{ item.id }}" 
+                  data-item-name="{{ item.name }}"
+                >
+                  Ver detalles
+                </button>
+                <button 
+                  class="btn btn-outline-primary btn-sm rating-button" 
+                  data-item-id="{{ item.id }}" 
+                  data-item-name="{{ item.name }}"
+                >
+                  Puntuar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+
+  <!-- Modal para detalles -->
+  <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="itemDetailsModalLabel">Detalles del Destino</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body" id="itemDetailsModalBody">
+          <!-- Se rellena dinámicamente con JavaScript -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Rating -->
+  <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ratingModalLabel">Califica este destino</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="ratingForm">
+            <input type="hidden" id="ratingItemId" name="item_id">
+            <div class="mb-3">
+              <label for="ratingInput" class="form-label">Tu rating (0-100):</label>
+              <input type="number" class="form-control" id="ratingInput" name="rating" min="0" max="100" required>
+            </div>
+          </form>
+          <div id="ratingFeedback" class="text-success"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="deleteRatingBtn" class="btn btn-danger">Eliminar Rating</button>
+          <button type="button" id="updateRatingBtn" class="btn btn-primary">Actualizar Rating</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 text-center text-md-start">
+          <h5><i class="fas fa-compass me-2"></i>Recomendación Turística</h5>
+          <p class="mb-0">Tu compañero de viaje para descubrir el mundo</p>
+        </div>
+        <div class="col-md-6 text-center text-md-end">
+          <p>&copy; 2025 Recomendación Turística</p>
+          <div class="mt-2">
+            <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Inicializar modales
+      const itemDetailsModal = new bootstrap.Modal(document.getElementById('itemDetailsModal'));
+      const ratingModal = new bootstrap.Modal(document.getElementById('ratingModal'));
+      
+      // Referencias a elementos DOM
+      const itemDetailsModalBody = document.getElementById('itemDetailsModalBody');
+      const ratingInput = document.getElementById('ratingInput');
+      const ratingItemId = document.getElementById('ratingItemId');
+      const ratingFeedback = document.getElementById('ratingFeedback');
+      
+      // === MODAL DE DETALLES ===
+      document.querySelectorAll('.item-details-button').forEach(button => {
+        button.addEventListener('click', function() {
+          const itemId = this.dataset.itemId;
+          const itemName = this.dataset.itemName;
+
+          fetch(`/item_details/${itemId}`)
+            .then(response => response.json())
+            .then(data => {
+              // Rellenar modal
+              itemDetailsModalBody.innerHTML = `
+                <img
+                  src="/static/images/${data.image}"
+                  alt="${itemName}"
+                  class="modal-description-image"
+                >
+                <h4 class="mb-3">${itemName}</h4>
+                <p class="modal-description-text">${data.description}</p>
+                <p class="text-muted">Visitas: ${data.visit_count}</p>
+              `;
+              itemDetailsModal.show();
+            })
+            .catch(err => {
+              console.error(err);
+              alert('Error cargando detalles');
+            });
+        });
+      });
+
+      // === QUITAR FAVORITOS ===
+      document.querySelectorAll('.remove-fav-button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const itemId = btn.dataset.itemId;
+
+          fetch('/remove_favorite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ item_id: itemId })
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data.message);
+            // Eliminar la tarjeta del DOM
+            const col = btn.closest('.col-md-4');
+            if (col) {
+              col.remove();
+            }
+          })
+          .catch(err => console.error(err));
+        });
+      });
+      
+      // === FUNCIONALIDAD DE RATING ===
+      // Cargar rating actual
+      function loadRating(itemId) {
+        fetch(`/get_rating/${itemId}`)
+          .then(response => response.json())
+          .then(data => {
+            ratingItemId.value = itemId;
+            ratingInput.value = data.rating !== null ? data.rating : '';
+          })
+          .catch(err => console.error(err));
+      }
+      
+      // Asignar listener a botones de Rating
+      document.querySelectorAll('.rating-button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const itemId = this.getAttribute('data-item-id');
+          loadRating(itemId);
+          ratingFeedback.textContent = '';
+          ratingModal.show();
+        });
+      });
+      
+      // Actualizar rating
+      document.getElementById('updateRatingBtn').addEventListener('click', function() {
+        const formData = new URLSearchParams(new FormData(document.getElementById('ratingForm')));
+        fetch('/update_rating', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: formData.toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(data.error) {
+            ratingFeedback.textContent = data.error;
+            ratingFeedback.classList.remove('text-success');
+            ratingFeedback.classList.add('text-danger');
+          } else {
+            ratingFeedback.textContent = data.message;
+            ratingFeedback.classList.remove('text-danger');
+            ratingFeedback.classList.add('text-success');
+            // Actualizar el contador de visitas en la tarjeta si es necesario:
+            document.querySelectorAll(`.visit-count[data-item-id="${ratingItemId.value}"]`).forEach(el => {
+              el.textContent = `Visitas: ${data.visit_count}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));
+      });
+      
+      // Eliminar rating
+      document.getElementById('deleteRatingBtn').addEventListener('click', function() {
+        const itemId = ratingItemId.value;
+        fetch('/delete_rating', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({item_id: itemId}).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+          if(data.error) {
+            ratingFeedback.textContent = data.error;
+            ratingFeedback.classList.remove('text-success');
+            ratingFeedback.classList.add('text-danger');
+          } else {
+            ratingFeedback.textContent = data.message;
+            ratingFeedback.classList.remove('text-danger');
+            ratingFeedback.classList.add('text-success');
+            ratingInput.value = '';
+            document.querySelectorAll(`.visit-count[data-item-id="${itemId}"]`).forEach(el => {
+              el.textContent = `Visitas: ${data.visit_count}`;
+            });
+          }
+        })
+        .catch(err => console.error(err));
+      });
+    });
+  </script>
+</body>
+</html>

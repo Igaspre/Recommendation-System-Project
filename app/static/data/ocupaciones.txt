@@ -1,0 +1,22 @@
+1
+Fuerzas armadas
+2
+Dirección de las empresas y de las administraciones públicas
+3
+Técnicos y profesionales científicos e intelectuales
+4
+Técnicos y profesionales de apoyo
+5
+Empleados de tipo administrativo
+6
+Trabajadores de los servicios de restauración, personales, protección y vendedores de los comercios
+7
+Trabajadores cualificados en la agricultura y en la pesca
+8
+Artesanos y trabajadores cualificados de industrias manufactureras, construcción, y minería, excepto operadores de instalaciones y maquinaria
+9
+Operadores de instalaciones y maquinaria, y montadores
+10
+Trabajadores no cualificados
+11
+Inactivo o desocupado

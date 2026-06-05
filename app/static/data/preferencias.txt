@@ -1,0 +1,345 @@
+1
+Estilos y periodos
+0
+2
+Compras
+0
+3
+Museos
+0
+4
+Espacios Abiertos
+0
+5
+Arquitectura religiosa
+0
+6
+Arquitectura defensiva
+0
+7
+Arquitectura civil
+0
+8
+Gastronomia
+0
+9
+Deportes
+0
+10
+Monumentos
+0
+11
+Ocio
+0
+12
+Salud y SPA
+0
+13
+Eventos
+0
+14
+Niños
+0
+15
+Patrimonio de la Humanidad
+0
+16
+Prehistórico
+1
+17
+Árabe
+1
+18
+Romano
+1
+19
+Medieval
+1
+20
+Gótico
+1
+21
+Románico
+1
+22
+Renacentista
+1
+23
+Barroco
+1
+24
+Rococo
+1
+25
+Neoclásico
+1
+26
+Modernista
+1
+27
+Contemporáneo
+1
+28
+Parques
+4
+29
+Jardines botánicos
+4
+30
+Parque infantil
+4
+31
+Playas
+4
+32
+Lagos
+4
+33
+Calles y plazas
+4
+34
+Paseos
+4
+35
+Parques temáticos
+4
+36
+Otros espacios abiertos
+4
+37
+Cines
+11
+38
+Teatros
+11
+39
+Conciertos y música en vivo
+11
+40
+Clubs y discotecas
+11
+41
+Bares y pubs
+11
+42
+Discotecas
+11
+43
+Música clasica
+11
+44
+Ópera
+11
+45
+Restaurantes
+8
+46
+Eventos
+8
+47
+Tiendas especializadas
+2
+48
+Tiendas tradicionales
+2
+49
+Otras compras
+2
+50
+Exposiciones
+13
+51
+Conferencias
+13
+52
+Ferias
+13
+53
+Congresos
+13
+54
+Fiestas
+13
+55
+Grandes eventos (exposiciones)
+13
+56
+Eventos deportivos
+13
+57
+Nauticos
+9
+58
+Grandes eventos
+9
+59
+Futbol
+9
+60
+Baloncesto
+9
+61
+Otros deportes
+9
+62
+Arte
+3
+63
+Ciencia y tecnología
+3
+64
+Historia
+3
+65
+Religión
+3
+66
+Ciencias naturales
+3
+67
+Arqueologia
+3
+68
+Historia y cultura local
+3
+69
+Artesanía
+3
+70
+Militar
+3
+71
+Otros museos
+3
+72
+Catedrales
+5
+73
+Iglesias
+5
+74
+Conventos
+5
+75
+Monasterios
+5
+76
+Claustros
+5
+77
+Sinagogas
+5
+78
+Mezquitas
+5
+79
+Campanarios
+5
+80
+Cementerios
+5
+81
+Tumbas
+5
+82
+Criptas
+5
+83
+Abadías
+5
+84
+Basílica
+5
+85
+Capilla
+5
+86
+Colegiata
+5
+87
+Castillos
+6
+88
+Torres
+6
+89
+Murallas
+6
+90
+Puertas
+6
+91
+Palacio
+7
+92
+Casa
+7
+93
+Centro histórico
+7
+94
+Ateneo
+7
+95
+Mercados
+7
+96
+Edificios gubernamentales
+7
+97
+Edificios académicos
+7
+98
+Otros edificios públicos
+7
+99
+Estaciones de transportes
+7
+100
+Atarazanas
+7
+101
+Puentes
+7
+102
+Faros
+7
+103
+Estadios y áreas deportivas
+7
+104
+Otros edificios emblemáticos
+7
+105
+Esculturas
+10
+106
+Fuentes
+4
+107
+Otros monumentos
+10
+108
+Centros de salud y spa
+12
+109
+Otros salud y spa
+12
+110
+Otras arquitecturas defensivas
+6
+111
+Otras arquitectura religiosa
+5
+112
+Otros eventos
+13
+113
+Otros gastronomía
+8
+114
+Otros ocio
+11
+115
+Otros estilos
+1
