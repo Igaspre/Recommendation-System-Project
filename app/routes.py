@@ -346,7 +346,7 @@ def dashboard_ajax():
         })
 
 def get_user_favorites(user_id):
-    """Helper function to get user's favorite items"""
+    """Devuelve los ids de los ítems marcados como favoritos por el usuario"""
     user_favorites = Favorite.query.filter_by(user_id=user_id).all()
     return [fav.item_id for fav in user_favorites]
 

@@ -4,10 +4,7 @@ from functools import lru_cache
 from sqlalchemy import desc
 from .models import Item, Rating, UserPreference, Preference, ItemClassification
 
-# -----------------------------------------------------
-# 1. Cache de la jerarquía de preferencias
-#    Para no reconstruirla en cada llamada
-# -----------------------------------------------------
+# Cacheamos la jerarquía de preferencias para no reconstruirla en cada llamada
 @lru_cache(maxsize=1)
 def get_preference_hierarchy():
     """
@@ -29,18 +26,13 @@ def has_subpreferences(pref_id, hierarchy):
     """
     return pref_id in hierarchy and bool(hierarchy[pref_id])
 
-# -----------------------------------------------------
-# 2. Selección y filtrado de las preferencias del usuario
-# -----------------------------------------------------
 def get_content_based_preferences(user_id, top_n=20, depurate=False):
     """
-    Devuelve hasta top_n preferencias del usuario, filtradas y ordenadas:
-      1) Carga y ordena las preferencias por interest desc.
-      2) Aplica un umbral dinámico para centrar solo en sus intereses más fuertes.
-      3) Omite preferencias de nivel 1 si existen subpreferencias con interés superior.
-      4) Devuelve una lista [(pref_id, interest, parent_id_or_None), ...].
+    Devuelve hasta top_n preferencias del usuario, filtradas y ordenadas por interés.
+    Se aplica un umbral dinámico para quedarse solo con los intereses más fuertes y
+    se omiten las preferencias de nivel 1 cuando alguna de sus subpreferencias tiene
+    más interés. El resultado es una lista [(pref_id, interest, parent_id_or_None), ...].
     """
-    # 2.1) Cargar preferencias de usuario
     user_prefs = (
         UserPreference.query
         .filter_by(user_id=user_id)
@@ -50,10 +42,10 @@ def get_content_based_preferences(user_id, top_n=20, depurate=False):
     if not user_prefs:
         return []
 
-    # 2.2) Definir umbral dinámico: interés del elemento top_n-ésimo
+    # Umbral dinámico: el interés del elemento top_n-ésimo
     threshold = user_prefs[top_n - 1].interest if len(user_prefs) >= top_n else 0
 
-    # 2.3) Construir dict {pref_id: (interest, parent_id)} filtrado por umbral
+    # Dict {pref_id: (interest, parent_id)} filtrado por umbral
     hierarchy = get_preference_hierarchy()
     pref_data = {
         up.preference_id: (up.interest, up.preference.parent_id)
@@ -61,12 +53,12 @@ def get_content_based_preferences(user_id, top_n=20, depurate=False):
         if up.interest >= threshold
     }
 
-    # 2.4) Agrupar subpreferencias para cada padre
+    # Agrupar las subpreferencias de cada padre
     parent_to_children = {}
     for pid, (interest, parent) in pref_data.items():
         parent_to_children.setdefault(parent, []).append((pid, interest))
 
-    # 2.5) Filtrar padres vs. hijos
+    # Filtrar padres frente a hijos
     final = []
     for pid, (interest, parent) in pref_data.items():
         if parent is None and has_subpreferences(pid, hierarchy):
@@ -84,7 +76,7 @@ def get_content_based_preferences(user_id, top_n=20, depurate=False):
             # Subpreferencia o preferencia de nivel 1 sin hijos en la taxonomía
             final.append((pid, interest, parent))
 
-    # 2.6) Ordenar por interés descendente y limitar a top_n
+    # Ordenar por interés descendente y limitar a top_n
     final.sort(key=lambda x: x[1], reverse=True)
 
     if depurate:
@@ -96,15 +88,11 @@ def get_content_based_preferences(user_id, top_n=20, depurate=False):
 
     return final[:top_n]
 
-# -----------------------------------------------------
-# 3. Cálculo del "ratio" y ranking de ítems
-# -----------------------------------------------------
 def compute_content_ratio_for_item(item, selected_prefs):
     """
-    Calcula un score base para un item:
-      - Multiplica el peso de cada clasificación por el interest del usuario.
-      - Promedia sobre el número de clasificaciones relevantes.
-      - Añade un bonus de popularidad usando logaritmo.
+    Calcula el score base de un ítem multiplicando el peso de cada clasificación por
+    el interés del usuario, promediando sobre las clasificaciones relevantes y
+    sumando un bonus de popularidad logarítmico.
     """
     if not selected_prefs:
         return 0
@@ -129,27 +117,24 @@ def compute_content_ratio_for_item(item, selected_prefs):
 
 def get_content_based_recommendations(user, top_n=10, top_prefs=20, all=False):
     """
-    1) Obtiene las preferencias filtradas del usuario.
-    2) Excluye items ya vistos (dataset='base').
-    3) Itera sobre todos los items para garantizar suficientes candidatos.
-    4) Calcula el ratio, normaliza (Z-score + min-max) y ordena.
-    5) Devuelve los top_n recomendaciones (o todos si all=True).
+    Recomienda ítems a partir de las preferencias filtradas del usuario, excluyendo
+    los que ya ha visto (dataset='base'). Recorre todos los ítems para tener candidatos
+    suficientes, calcula el ratio, lo normaliza (Z-score + min-max) y ordena.
+    Devuelve las top_n recomendaciones, o todas si all=True.
     """
-    # 3.1) Selección de preferencias
     selected = get_content_based_preferences(user.id, top_prefs)
     if not selected:
         return []
 
-    # 3.2) Ítems ya vistos
+    # Ítems ya vistos
     seen = {
         r.item_id
         for r in Rating.query.filter_by(user_id=user.id, dataset='base')
     }
 
-    # 3.3) Obtener todos los items como candidatos
+    # Todos los ítems son candidatos
     candidates = Item.query.all()
 
-    # 3.4) Calcular scores
     scored = []
     for item in candidates:
         if item.id in seen:
@@ -159,7 +144,7 @@ def get_content_based_recommendations(user, top_n=10, top_prefs=20, all=False):
     if not scored:
         return []
 
-    # 3.5) Normalización Z-score + min-max a [0,100]
+    # Normalización Z-score + min-max a [0,100]
     ratios = [score for _, score in scored]
     mean = statistics.mean(ratios)
     stdev = statistics.pstdev(ratios) or 1.0
@@ -175,6 +160,6 @@ def get_content_based_recommendations(user, top_n=10, top_prefs=20, all=False):
             norm = 50.0
         normalized.append((item, round(norm, 2)))
 
-    # 3.6) Ordenar y recortar resultados
+    # Ordenar y recortar resultados
     normalized.sort(key=lambda x: x[1], reverse=True)
     return normalized if all else normalized[:top_n]

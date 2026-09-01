@@ -2,14 +2,8 @@ from .models import Item, User
 
 def get_system_weight(selected_systems, system):
     """
-    Determina el peso para cada sistema de recomendación basado en la cantidad de sistemas seleccionados.
-    
-    Args:
-        selected_systems: Lista de sistemas seleccionados ('SR_DE', 'SR_BC', 'SR_COL')
-        system: El sistema específico para el que se quiere obtener el peso
-        
-    Returns:
-        float: Peso porcentual para el sistema (0-100)
+    Determina el peso porcentual (0-100) de un sistema de recomendación en función
+    de cuántos sistemas se hayan seleccionado ('SR_DE', 'SR_BC', 'SR_COL').
     """
     n_systems = len(selected_systems)
     
@@ -26,14 +20,8 @@ def get_system_weight(selected_systems, system):
 
 def merge_individual_recommendations(recommendations_dict, selected_systems, n=10, all=False):
     """
-    Fusiona las recomendaciones individuales aplicando pesos según los sistemas seleccionados.
-    
-    Args:
-        recommendations_dict: Diccionario con recomendaciones por sistema
-        selected_systems: Lista de sistemas seleccionados ('SR_DE', 'SR_BC', 'SR_COL')
-        
-    Returns:
-        list: Lista de tuplas (item, score) ordenadas por puntuación
+    Fusiona las recomendaciones individuales de cada sistema aplicando su peso
+    correspondiente. Devuelve una lista de tuplas (item, score) ordenada por puntuación.
     """
     rec_dict = {}
     

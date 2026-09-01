@@ -5,13 +5,7 @@ def aggregate_group_recommendations(all_recommendations, selected_systems):
     """
     Técnica de agregación de recomendaciones para grupo.
     Usa el promedio de las puntuaciones para cada ítem, considerando los pesos de los sistemas.
-    
-    Args:
-        all_recommendations: Diccionario con recomendaciones por usuario y sistema
-        selected_systems: Lista de sistemas seleccionados ('SR_DE', 'SR_BC', 'SR_COL')
-        
-    Returns:
-        list: Lista de tuplas (item, score) ordenadas por puntuación
+    Devuelve una lista de tuplas (item, score) ordenada por puntuación.
     """
     aggregated_scores = {}
     item_counts = {}
@@ -47,15 +41,8 @@ def aggregate_group_recommendations(all_recommendations, selected_systems):
 
 def calculate_group_item_ratings(all_recommendations, merged_recommendations, selected_systems):
     """
-    Calcula la adecuación de cada ítem para cada usuario del grupo.
-    
-    Args:
-        all_recommendations: Diccionario con recomendaciones por usuario y sistema
-        merged_recommendations: Lista de tuplas (item, score) con las recomendaciones finales
-        selected_systems: Lista de sistemas seleccionados ('SR_DE', 'SR_BC', 'SR_COL')
-        
-    Returns:
-        dict: Diccionario con el formato {item_id: {user_id: rating}}
+    Calcula la adecuación de cada ítem recomendado para cada usuario del grupo.
+    Devuelve un diccionario con el formato {item_id: {user_id: rating}}.
     """
     group_ratings = {}
     
@@ -89,15 +76,8 @@ def calculate_group_item_ratings(all_recommendations, merged_recommendations, se
 
 def get_group_recommendations(users, selected_systems, recommender_functions):
     """
-    Obtiene recomendaciones para un grupo de usuarios.
-    
-    Args:
-        users: Lista de objetos User del grupo
-        selected_systems: Lista de sistemas seleccionados ('SR_DE', 'SR_BC', 'SR_COL')
-        recommender_functions: Diccionario de funciones recomendadoras por sistema
-        
-    Returns:
-        tuple: (recomendaciones_fusionadas, ratings_por_usuario)
+    Obtiene las recomendaciones para un grupo de usuarios y devuelve la tupla
+    (recomendaciones_fusionadas, ratings_por_usuario).
     """
     all_recommendations = {}
     

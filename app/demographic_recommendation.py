@@ -212,16 +212,16 @@ def get_demographic_type(user):
             return "familia_hijos_adolescentes"
 
     # 2) Segmentos basados en ocupación:
-    #    2 → Dirección / ejecutivos
+    #    2 -> Dirección / ejecutivos
     if user.occupation == 2:
         return "ejecutivo_negocios"
-    #    3 → Técnicos y profesionales científicos e intelectuales
+    #    3 -> Técnicos y profesionales científicos e intelectuales
     if user.occupation == 3:
         return "profesional_ct"
-    #    6 → Servicios de restauración, protección y ventas
+    #    6 -> Servicios de restauración, protección y ventas
     if user.occupation == 6:
         return "amante_gastronomia"
-    #    7 → Agricultura y pesca (naturaleza → eco)
+    #    7 -> Agricultura y pesca (naturaleza -> eco)
     if user.occupation == 7:
         return "eco_turista"
 
@@ -269,7 +269,7 @@ def build_demographic_preference_vector(user):
                     pref_interest[c] = parent_val
         else:
             # Al menos un hijo está puntuado => ignoramos padre
-            pref_interest[p_id] = 0  # “anulamos” la preferencia de nivel 1
+            pref_interest[p_id] = 0  # anulamos la preferencia de nivel 1
 
     # Construimos el vector final
     final_vector = [0]*NUM_PREFERENCES
