@@ -2,9 +2,12 @@
 
 This project is a tourism recommendation system built with Python and Flask.
 
+> Academic project (2024–2025) developed by a team of 3 students.
+
 ## Description
 
 It includes:
+
 - Demographic recommendation based on user profile.
 - Content-based recommendation using user preferences.
 - Collaborative recommendation using Pearson similarity.
@@ -16,6 +19,7 @@ It includes:
 ## Project structure
 
 - `app/`: main Flask application package.
+
   - `__init__.py`: Flask application and SQLAlchemy initialization.
   - `models.py`: data models.
   - `routes.py`: web routes and application logic.
@@ -27,13 +31,12 @@ It includes:
   - `group_recommendation.py`: group recommendation logic.
   - `static/`: static resources, data, and descriptions.
   - `templates/`: HTML templates.
-
 - `scripts/`: helper scripts.
+
   - `download_images.py`: downloads images for items.
   - `crawl_descriptions.py`: fetches item descriptions from Wikipedia.
   - `reduce_images.py`: optimizes PNG images.
   - `evaluate.py`: evaluates recommendation systems and generates results.
-
 - `config.py`: application configuration.
 - `run.py`: Flask app entry point.
 - `instance/`: generated SQLite database.
